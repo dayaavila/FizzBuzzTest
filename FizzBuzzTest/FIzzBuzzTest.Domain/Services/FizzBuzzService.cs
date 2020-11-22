@@ -26,8 +26,9 @@ namespace FizzBuzzTest.Domain.Services
 			}
 			catch (Exception exception)
 			{
-				_logger.LogError(exception.ToString());
-				throw new FizzBuzzException("Failed GetFizzBuzzResult", exception);
+				var fizzBuzzException = new FizzBuzzException("Failed GetFizzBuzzResult", exception);
+				_logger.LogError(fizzBuzzException.ToString());
+				throw fizzBuzzException;
 			}
 		}
 
@@ -68,8 +69,9 @@ namespace FizzBuzzTest.Domain.Services
 			}
 			catch (Exception exception)
 			{
-				_logger.LogError(exception.ToString());
-				throw new FizzBuzzException("Failed GetCalculateFizzBuzz", exception);
+				var fizzBuzzException = new FizzBuzzException("Failed GetCalculateFizzBuzz", exception);
+				_logger.LogError(fizzBuzzException.ToString());
+				throw fizzBuzzException;
 			}
 		}
 	}

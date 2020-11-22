@@ -20,15 +20,32 @@ namespace FizzBuzzTest.Api.Test.Controllers
 			var configuration = GetConfig();
 			var fizzBuzzService = new FizzBuzzService(new NullLogger<FizzBuzzService>());
 			var sut = new FizzBuzzController(configuration, new NullLogger<FizzBuzzController>(), fizzBuzzService);
+			var startNumber = 1;
 
 			// Act
-			var fizzBuzzResult = await sut.GetFizzBuzz(1);
+			var fizzBuzzResult = await sut.GetFizzBuzz(startNumber);
 
 			// Assert
-			Assert.IsInstanceOf<OkObjectResult>(fizzBuzzResult.Result);
 			var okObjectResult = (OkObjectResult)fizzBuzzResult.Result;
-			Assert.IsInstanceOf<FizzBuzzEntity>(okObjectResult.Value);
 			Assert.AreEqual(30, ((FizzBuzzEntity)okObjectResult.Value).FizzBuzzResults.Count);
+		}
+
+		[Test]
+		public async Task GivenStartNumberGreaterThanLimitNumber_WhenGetFizzBuzz_ThenReturnBadRequest()
+		{
+			// Arrange
+			var configuration = GetConfig();
+			var fizzBuzzService = new FizzBuzzService(new NullLogger<FizzBuzzService>());
+			var sut = new FizzBuzzController(configuration, new NullLogger<FizzBuzzController>(), fizzBuzzService);
+			var startNumber = 30;
+
+			// Act
+			var fizzBuzzResult = await sut.GetFizzBuzz(startNumber);
+
+			// Assert
+			var badRequestObjectResult = (BadRequestObjectResult)fizzBuzzResult.Result;
+			Assert.IsInstanceOf<BadRequestObjectResult>(badRequestObjectResult);
+			Assert.AreEqual("The start number should not be greater than 30", badRequestObjectResult.Value);
 		}
 
 		private IConfiguration GetConfig()

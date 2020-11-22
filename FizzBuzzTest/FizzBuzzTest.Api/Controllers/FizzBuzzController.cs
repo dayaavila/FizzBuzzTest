@@ -32,9 +32,14 @@ namespace FizzBuzzTest.Api.Controllers
 			try
 			{
 				var limitNumber = Convert.ToInt32(_configuration["LimitNumber"]);
+				if (startNumber >= limitNumber)
+				{
+					return BadRequest($"The start number should not be greater than {limitNumber}");
+				}
+
 				_logger.LogInformation($"FizzBuzz Operation with startNumber: {startNumber} and limitNumber: {limitNumber} Started");
 				var fizzBuzzResult = await _fizzBuzzService.GetFizzBuzzResult(startNumber, limitNumber);
-				_logger.LogInformation("FizzBuzz Operation Completed");
+				_logger.LogInformation("FizzBuzz Operation Completed");				
 				return Ok(fizzBuzzResult);
 			}
 			catch (Exception exception)
